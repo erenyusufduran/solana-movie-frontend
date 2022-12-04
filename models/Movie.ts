@@ -20,7 +20,7 @@ export class Movie {
     borsh.str("description"),
   ]);
 
-  serialize(): Buffer {
+  serialize(instruction: number): Buffer {
     const buffer = Buffer.alloc(1000);
     this.borshInstructionSchema.encode({ ...this, variant: 0 }, buffer);
     return buffer.slice(0, this.borshInstructionSchema.getSpan(buffer));

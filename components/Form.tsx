@@ -13,6 +13,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Textarea,
+  Switch,
 } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import * as Web3 from "@solana/web3.js";
@@ -26,6 +27,7 @@ export const Form: FC = () => {
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(0);
   const [message, setMessage] = useState("");
+  const [toggle, setToggle] = useState(true);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -38,7 +40,7 @@ export const Form: FC = () => {
       alert("Please connect your wallet!");
       return;
     }
-    const buffer = movie.serialize();
+    const buffer = movie.serialize(toggle ? 0 : 1);
     const transaction = new Web3.Transaction();
 
     const [pda] = await Web3.PublicKey.findProgramAddress(
@@ -101,6 +103,12 @@ export const Form: FC = () => {
               <NumberDecrementStepper />
             </NumberInputStepper>
           </NumberInput>
+        </FormControl>
+        <FormControl display="center" alignItems="center">
+          <FormLabel color="gray.100" mt={2}>
+            Update
+          </FormLabel>
+          <Switch id="update" onChange={(event) => setToggle((prevCheck) => !prevCheck)} />
         </FormControl>
         <Button width="full" mt={4} type="submit">
           Submit Review
